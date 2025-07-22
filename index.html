@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Türkiye Multispor Etkinlikleri Takvimi</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .event-card { transition: all 0.3s ease; }
+        .event-card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .filter-button { transition: all 0.2s ease; }
+        .filter-button.active { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .sport-tag { font-size: 0.75rem; padding: 0.25rem 0.5rem; border-radius: 9999px; font-weight: 500; }
+        .trail-tag { background-color: #10b981; color: white; }
+        .yol-tag { background-color: #3b82f6; color: white; }
+        .triatlon-tag { background-color: #f59e0b; color: white; }
+        .yuzme-tag { background-color: #06b6d4; color: white; }
+        .bisiklet-tag { background-color: #84cc16; color: white; }
+        .hero-gradient { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+         {
+            body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .no-print { display: none !important; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="hero-gradient text-white py-12">
+        <div class="container mx-auto px-6 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">
+                <i class="fas fa-running mr-3"></i>
+                Türkiye Multispor Etkinlikleri Takvimi
+            </h1>
+            <p class="text-xl opacity-90 mb-2">Temmuz 2025 - Ocak 2026</p>
+            <p class="text-lg opacity-80">52 Multispor Etkinliği | Trail • Yol • Triatlon • Yüzme • Bisiklet</p>
+        </div>
+    </header>
+
+    <!-- Filters -->
+    <div class="container mx-auto px-6 py-8">
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                <i class="fas fa-filter mr-3 text-indigo-600"></i>
+                Etkinlik Filtreleri
+            </h2>
+            
+            <!-- Sport Type Filters -->
+            <div class="mb-6">
+                <h3 class="text-lg font-semibold text-gray-700 mb-3">Spor Türü</h3>
+                <div class="flex flex-wrap gap-2">
+                    <button class="filter-button px-4 py-2 rounded-full border border-gray-300 text-gray-700 hover:bg-indigo-600 hover:text-white active" data-filter="all">
+                        Tümü (<span id="total-count">52</span>)
+                    </button>
+                    <button class="filter-button px-4 py-2 rounded-full border border-gray-300 text-gray-700 hover:bg-blue-600 hover:text-white" data-filter="trail">
+                        <i class="fas fa-mountain mr-1"></i> Trail
+                    </button>
+                    <button class="filter-button px-4 py-2 rounded-full border border-gray-300 text-gray-700 hover:bg-indigo-600 hover:text-white" data-filter="yol">
+                        <i class="fas fa-road mr-1"></i> Yol
+                    </button>
+                    <button class="filter-button px-4 py-2 rounded-full border border-gray-300 text-gray-700 hover:bg-amber-600 hover:text-white" data-filter="triatlon">
+                        <i class="fas fa-swimmer mr-1"></i> Triatlon
+                    </button>
+                    <button class="filter-button px-4 py-2 rounded-full border border-gray-300 text-gray-700 hover:bg-cyan-600 hover:text-white" data-filter="yuzme">
+                        <i class="fas fa-swimming-pool mr-1"></i> Yüzme
+                    </button>
+                    <button class="filter-button px-4 py-2 rounded-full border border-gray-300 text-gray-700 hover:bg-lime-600 hover:text-white" data-filter="bisiklet">
+                        <i class="fas fa-bicycle mr-1"></i> Bisiklet
+                    </button>
+                </div>
+            </div>
+
+            <!-- Month Filters -->
+            <div class="mb-6">
+                <h3 class="text-lg font-semibold text-gray-700 mb-3">Ay Filtresi</h3>
+                <div class="flex flex-wrap gap-2">
+                    <button class="month-filter px-3 py-1 rounded-full border border-gray-300 text-gray-700 hover:bg-indigo-600 hover:text-white active" data-month="all">Tüm Aylar</button>
+                    <button class="month-filter px-3 py-1 rounded-full border border-gray-300 text-gray-700 hover:bg-indigo-600 hover:text-white" data-month="temmuz">Temmuz 2025</button>
+                    <button class="month-filter px-3 py-1 rounded-full border border-gray-300 text-gray-700 hover:bg-indigo-600 hover:text-white" data-month="agustos">Ağustos 2025</button>
+                    <button class="month-filter px-3 py-1 rounded-full border border-gray-300 text-gray-700 hover:bg-indigo-600 hover:text-white" data-month="eylul">Eylül 2025</button>
+                    <button class="month-filter px-3 py-1 rounded-full border border-gray-300 text-gray-700 hover:bg-indigo-600 hover:text-white" data-month="ekim">Ekim 2025</button>
+                    <button class="month-filter px-3 py-1 rounded-full border border-gray-300 text-gray-700 hover:bg-indigo-600 hover:text-white" data-month="kasim">Kasım 2025</button>
+                    <button class="month-filter px-3 py-1 rounded-full border border-gray-300 text-gray-700 hover:bg-indigo-600 hover:text-white" data-month="aralik">Aralık 2025</button>
+                    <button class="month-filter px-3 py-1 rounded-full border border-gray-300 text-gray-700 hover:bg-indigo-600 hover:text-white" data-month="ocak">Ocak 2026</button>
+                </div>
+            </div>
+
+            <!-- Search Box -->
+            <div>
+                <h3 class="text-lg font-semibold text-gray-700 mb-3">Etkinlik Ara</h3>
+                <input type="text" id="search-input" placeholder="Etkinlik adı veya şehir ara..." 
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent">
+            </div>
+
+            <!-- Clear Filters -->
+            <div class="mt-6 text-center">
+                <button id="clear-filters" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">
+                    <i class="fas fa-times mr-2"></i> Filtreleri Temizle
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Count -->
+        <div class="mb-6">
+            <p class="text-lg text-gray-700">
+                <span id="filtered-count">52</span> etkinlik gösteriliyor
+            </p>
+        </div>
+
+        <!-- Events Grid -->
+        <div id="events-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            <!-- Events will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-6 text-center">
+            <p class="text-lg font-semibold mb-2">
+                <i class="fas fa-user mr-2"></i>
+                Hazırlayan: Ümit Emre Erdoğan
+            </p>
+            <p class="text-gray-400">
+                Türkiye Multispor Etkinlikleri Takvimi • 2025-2026
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Events data
+        const eventsData = [
+            { date: "25-26 Temmuz 2025", name: "Palandöken Run to Stars", location: "Palandöken, Erzurum", sport: "Trail", distances: "Trail (5V, 25K, 50K)", month: "temmuz", link: "https://teamrunbo.com/yaristakvimimiz/" },
+            { date: "26 Temmuz 2025", name: "Kanyon Ulubey Ultra Trail", location: "Uşak", sport: "Trail", distances: "Trail (12K, 25K, 60K, 120K)", month: "temmuz", link: "https://celilakman.wordpress.com/yaristakvimi/" },
+            { date: "26 Temmuz 2025", name: "Salda Lake Triathlon", location: "Burdur", sport: "Triatlon", distances: "Sprint, Olimpik", month: "temmuz", link: "https://teamrunbo.com/yaristakvimimiz/" },
+            { date: "29-30 Temmuz 2025", name: "Beykoz Açık Deniz Yüzme Yarışı", location: "Beykoz, İstanbul", sport: "Yüzme", distances: "100m Sprint, 1500m", month: "temmuz", link: "https://teamrunbo.com/yaristakvimimiz/" },
+            { date: "1 Ağustos 2025", name: "Palandöken MTB Cup", location: "Erzurum", sport: "Bisiklet", distances: "MTB", month: "agustos", link: "https://celilakman.wordpress.com/yaristakvimi/" },
+            { date: "2 Ağustos 2025", name: "Uludağ Performans Tırmanışı", location: "Bursa", sport: "Bisiklet", distances: "61K", month: "agustos", link: "https://teamrunbo.com/yaristakvimimiz/" },
+            { date: "2 Ağustos 2025", name: "Gökçeada Yüzme Maratonu", location: "Gökçeada, Çanakkale", sport: "Yüzme", distances: "25K", month: "agustos", link: "https://teamrunbo.com/yaristakvimimiz/" },
+            { date: "2-3 Ağustos 2025", name: "Eğirdir Triatlonu Türkiye Kupası", location: "Eğirdir, Isparta", sport: "Triatlon", distances: "Sprint", month: "agustos", link: "https://teamrunbo.com/yaristakvimimiz/" },
+            { date: "3 Ağustos 2025", name: "Eskişehir Yarı Maratonu", location: "Eskişehir", sport: "Yol", distances: "10K, 21K, Çocuk Koşusu", month: "agustos", link: "https://teamrunbo.com/yaristakvimimiz/" },
+            { date: "8-9 Ağustos 2025", name: "Ultra Abant", location: "Abant, Bolu", sport: "Trail", distances: "Trail (6K, 18K, 33K, 60K)", month: "agustos", link: "https://teamrunbo.com/yaristakvimimiz/" },
+            { date: "16 Ağustos 2025", name: "Fenerbahçe-Yassıada Geçişi Yüzme", location: "İstanbul Boğazı", sport: "Yüzme", distances: "12K", month: "agustos", link: "https://www.triatlon.org.tr/medya/2025faaliyetprogramiiitaslak.pdf" },
+            { date: "22-24 Ağustos 2025", name: "Runfire Salt Lake Ultra Trail", location: "Eskil, Aksaray", sport: "Trail", distances: "Trail (10K, 15K, 20K, 40K, 80K, 160K)", month: "agustos", link: "https://www.ahotu.com/event/runfire-salt-lake-ultra-trail" },
+            { date: "24 Ağustos 2025", name: "Boğaziçi Kıtalararası Yüzme Yarışı", location: "Kuruçeşme, İstanbul", sport: "Yüzme", distances: "6.5K", month: "agustos", link: "https://www.ahotu.com/event/gelibolu-maratonu" },
+            { date: "24 Ağustos 2025", name: "Başkent Gran Fondo", location: "Ankara", sport: "Bisiklet", distances: "Gran Fondo", month: "agustos", link: "https://granfondo.com.tr/yaris-takvimi/" },
+            { date: "30 Ağustos 2025", name: "Çanakkale Boğazı Yüzme Yarışması", location: "Çanakkale", sport: "Yüzme", distances: "6.5K", month: "agustos", link: "https://www.ahotu.com/event/istanbul-marathon" },
+            { date: "30-31 Ağustos 2025", name: "Europe Triathlon Championships Istanbul", location: "Küçüksu Çayırı, İstanbul", sport: "Triatlon", distances: "Şampiyona Formatı", month: "agustos", link: "https://teamrunbo.com/yaristakvimimiz/" },
+            { date: "31 Ağustos 2025", name: "Edirne Maratonu", location: "Edirne", sport: "Yol", distances: "10K, 21K, 42K", month: "agustos", link: "https://teamrunbo.com/yaristakvimimiz/" },
+            { date: "31 Ağustos 2025", name: "Akdeniz Karageçit Trail", location: "Kadıncık Barajı, Mersin", sport: "Trail", distances: "Trail (8K, 17K, 33K)", month: "agustos", link: "https://teamrunbo.com/yaristakvimimiz/" },
+            { date: "31 Ağustos 2025", name: "Çaycuma Gran Fondo", location: "Zonguldak", sport: "Bisiklet", distances: "56K, 90K", month: "agustos", link: "https://teamrunbo.com/yaristakvimimiz/" },
+            { date: "4 Eylül 2025", name: "Tour of İstanbul", location: "İstanbul", sport: "Bisiklet", distances: "Tur Formatı", month: "eylul", link: "https://teamrunbo.com/yaristakvimimiz/" },
+            { date: "5-6 Eylül 2025", name: "Merrell Belgrad Ultra Trail", location: "Kemerburgaz, İstanbul", sport: "Trail", distances: "Trail (5K, 15K, 30K, 60K)", month: "eylul", link: "https://www.belgradultra.com/tr" },
+            { date: "6-7 Eylül 2025", name: "Davraz Sky Run", location: "Isparta", sport: "Trail", distances: "Trail (10K, 25K)", month: "eylul", link: "https://teamrunbo.com/yaristakvimimiz/" },
+            { date: "7 Eylül 2025", name: "Safder Kartoğlu Yarı Maratonu", location: "Devrek, Zonguldak", sport: "Yol", distances: "3K, 10K, 21K", month: "eylul", link: "https://teamrunbo.com/yaristakvimimiz/" },
+            { date: "14 Eylül 2025", name: "Nilüfer Bursa Yarı Maratonu", location: "Bursa", sport: "Yol", distances: "21K", month: "eylul", link: "https://teamrunbo.com/yaristakvimimiz/" },
+            { date: "14 Eylül 2025", name: "İzmir Gran Fondo", location: "İzmir", sport: "Bisiklet", distances: "Gran Fondo", month: "eylul", link: "https://teamrunbo.com/yaristakvimimiz/" },
+            { date: "26-28 Eylül 2025", name: "Kaçkar By UTMB", location: "Kaçkar Dağları, Rize", sport: "Trail", distances: "Trail (20K, 50K, 100K)", month: "eylul", link: "https://celilakman.wordpress.com/yaristakvimi/" },
+            { date: "3-5 Ekim 2025", name: "Bodrum Yarı Maratonu", location: "Bodrum, Muğla", sport: "Yol", distances: "5K, 10K, 21K", month: "ekim", link: "https://teamrunbo.com/yaristakvimimiz/" },
+            { date: "12 Ekim 2025", name: "L'Etape Türkiye Bisiklet Yarışı", location: "Kapadokya", sport: "Bisiklet", distances: "55K, 106K", month: "ekim", link: "https://teamrunbo.com/yaristakvimimiz/" },
+            { date: "17-18 Ekim 2025", name: "Salomon Cappadocia Ultra Trail", location: "Kapadokya, Nevşehir", sport: "Trail", distances: "Trail (14K, 38K, 63K, 119K)", month: "ekim", link: "https://www.ahotu.com/event/salomon-cappadocia-ultra-trail" },
+            { date: "2 Kasım 2025", name: "N Kolay İstanbul Maratonu", location: "İstanbul", sport: "Yol", distances: "15K, 42K", month: "kasim", link: "https://maraton.istanbul/" },
+            { date: "2 Kasım 2025", name: "Ironman 70.3 Türkiye", location: "Belek, Antalya", sport: "Triatlon", distances: "1.9K yüzme + 90K bisiklet + 21.1K koşu", month: "kasim", link: "https://www.ironman.com/races/im703-turkey" },
+            { date: "6-9 Kasım 2025", name: "Nirvana UCI Gran Fondo", location: "Antalya", sport: "Bisiklet", distances: "Gran Fondo", month: "kasim", link: "https://teamrunbo.com/yaristakvimimiz/" },
+            { date: "14-16 Kasım 2025", name: "Marmaris Ultra Trail", location: "Marmaris, Muğla", sport: "Trail", distances: "Trail (5K, 16K, 30K, 48K, 76K)", month: "kasim", link: "https://teamrunbo.com/yaristakvimimiz/" },
+            { date: "29 Kasım 2025", name: "İda Ultra", location: "İda Dağları, Balıkesir", sport: "Trail", distances: "Trail (15K, 36K, 66K, 114K)", month: "kasim", link: "https://teamrunbo.com/yaristakvimimiz/" },
+            { date: "7 Aralık 2025", name: "Geyik Koşuları", location: "Yalova", sport: "Yol", distances: "Trail (4K, 8K, 14K, 28K)", month: "aralik", link: "https://celilakman.wordpress.com/yaristakvimi/" },
+            { date: "21 Aralık 2025", name: "Atatürk Koşusu Bursa", location: "Bursa", sport: "Yol", distances: "5K", month: "aralik", link: "https://celilakman.wordpress.com/yaristakvimi/" },
+            { date: "27-28 Aralık 2025", name: "Antalya Ultra Maratonu", location: "Antalya", sport: "Ultra Maraton", distances: "5K, 12K, 22K, 31K, 42K, 57K", month: "aralik", link: "https://celilakman.wordpress.com/yaristakvimi/" },
+            { date: "28 Aralık 2025", name: "Büyük Atatürk Koşusu Ankara", location: "Ankara", sport: "Yol", distances: "Geleneksel Mesafe", month: "aralik", link: "https://celilakman.wordpress.com/yaristakvimi/" },
+            { date: "Ocak 2026", name: "Adana Kurtuluş Yarı Maratonu", location: "Adana", sport: "Yol", distances: "10K, 21K, Halk Koşusu, Çocuk Koşusu", month: "ocak", link: "http://adanakurtulusmaratonu.adana.bel.tr/" },
+            { date: "17-18 Ocak 2026", name: "Rize Kış Yüzme Şenliği", location: "Rize/Ardeşen", sport: "Yüzme", distances: "Açık Su Yüzme", month: "ocak", link: "https://festivall.com.tr/fest/1/spor-festivalleri/4" },
+            { date: "18 Ocak 2026", name: "Petranboard Kayak Şenliği", location: "Rize/İkizdere", sport: "Su Sporları", distances: "Kayak", month: "ocak", link: "https://festivall.com.tr/fest/1/spor-festivalleri/4" },
+            { date: "14 Eylül 2025", name: "İstanbul'u Koşuyorum - Asya Etabı", location: "Üsküdar, İstanbul", sport: "Yol", distances: "5K, 10K", month: "eylul", link: "https://istanbulukosuyorum.istanbul/istanbulu-kosuyorum-asya-etabi-2025/" },
+            { date: "19-21 Eylül 2025", name: "Tuzla Run Fest", location: "Tuzla, İstanbul", sport: "Yol", distances: "5K Halk Koşusu, 10K", month: "eylul", link: "https://tuzlarunfest.com/" },
+            { date: "20 Eylül 2025", name: "Under Armour Gece Koşuları", location: "Belgrad Ormanı, İstanbul", sport: "Trail", distances: "6K, 12K", month: "eylul", link: "https://www.gecekosulari.com/" },
+            { date: "12 Ekim 2025", name: "Bosphorun - Avrupa Yakası", location: "Kuruçeşme, İstanbul", sport: "Yol", distances: "10.5K", month: "ekim", link: "https://bosphorun.istanbul/" },
+            { date: "19 Ekim 2025", name: "Büyükada Yarı Maratonu", location: "Büyükada, İstanbul", sport: "Yol", distances: "5K, 10K, 21K", month: "ekim", link: "https://buyukadayarimaratonu.com/" },
+            { date: "26 Ekim 2025", name: "Zeytinburnu Cumhuriyet Koşusu", location: "Zeytinburnu, İstanbul", sport: "Yol", distances: "10K", month: "ekim", link: "https://vatandas.zeybim.com/cumhuriyet-kosusu" },
+            { date: "7 Aralık 2025", name: "Geyik Koşuları", location: "Belgrad Ormanı, İstanbul", sport: "Trail", distances: "4K, 8K, 14K, 28K", month: "aralik", link: "https://www.geyikkosulari.com/" },
+            { date: "27 Nisan 2025", name: "İstanbul Yarı Maratonu", location: "İstanbul", sport: "Yol", distances: "10K, 21K", month: "nisan", link: "https://istanbulyarimaratonu.com/" },
+            { date: "30 Ağustos 2025", name: "Summer Run İstanbul III", location: "İstanbul", sport: "Yol", distances: "5K, 10K", month: "agustos", link: "https://teamrunbo.com/yaristakvimimiz/" }
+        ];
+
+        let currentFilter = 'all';
+        let currentMonth = 'all';
+        let searchTerm = '';
+
+        function getSportTagClass(sport) {
+            switch(sport.toLowerCase()) {
+                case 'trail': return 'trail-tag';
+                case 'yol': return 'yol-tag';
+                case 'triatlon': return 'triatlon-tag';
+                case 'yüzme': case 'yuzme': return 'yuzme-tag';
+                case 'bisiklet': return 'bisiklet-tag';
+                default: return 'yol-tag';
+            }
+        }
+
+        function getSportIcon(sport) {
+            switch(sport.toLowerCase()) {
+                case 'trail': return 'fas fa-mountain';
+                case 'yol': return 'fas fa-road';
+                case 'triatlon': return 'fas fa-swimmer';
+                case 'yüzme': case 'yuzme': return 'fas fa-swimming-pool';
+                case 'bisiklet': return 'fas fa-bicycle';
+                default: return 'fas fa-running';
+            }
+        }
+
+        function renderEvents() {
+            const container = document.getElementById('events-container');
+            const filteredEvents = eventsData.filter(event => {
+                const matchesFilter = currentFilter === 'all' || 
+                                    event.sport.toLowerCase() === currentFilter.toLowerCase() ||
+                                    (currentFilter === 'yuzme' && event.sport.toLowerCase() === 'yüzme');
+                const matchesMonth = currentMonth === 'all' || event.month === currentMonth;
+                const matchesSearch = searchTerm === '' || 
+                                    event.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                    event.location.toLowerCase().includes(searchTerm.toLowerCase());
+                return matchesFilter && matchesMonth && matchesSearch;
+            });
+
+            document.getElementById('filtered-count').textContent = filteredEvents.length;
+
+            container.innerHTML = filteredEvents.map(event => `
+                <div class="event-card bg-white rounded-xl shadow-md p-6 cursor-pointer" onclick="window.open('${event.link}', '_blank')">
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="sport-tag ${getSportTagClass(event.sport)}">
+                            <i class="${getSportIcon(event.sport)} mr-1"></i>
+                            ${event.sport}
+                        </span>
+                        <span class="text-sm text-gray-500">${event.date}</span>
+                    </div>
+                    
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2 line-clamp-2">${event.name}</h3>
+                    
+                    <div class="flex items-center text-gray-600 mb-3">
+                        <i class="fas fa-map-marker-alt mr-2 text-red-500"></i>
+                        <span class="text-sm">${event.location}</span>
+                    </div>
+                    
+                    <div class="flex items-center text-gray-600 mb-4">
+                        <i class="fas fa-ruler mr-2 text-blue-500"></i>
+                        <span class="text-sm">${event.distances}</span>
+                    </div>
+                    
+                    <div class="flex items-center text-indigo-600 hover:text-indigo-800 transition-colors">
+                        <span class="text-sm font-medium">Detaylar için tıklayın</span>
+                        <i class="fas fa-external-link-alt ml-2"></i>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Event listeners
+        document.querySelectorAll('.filter-button').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.filter-button').forEach(b => b.classList.remove('active'));
+                button.classList.add('active');
+                currentFilter = button.dataset.filter;
+                renderEvents();
+            });
+        });
+
+        document.querySelectorAll('.month-filter').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.month-filter').forEach(b => b.classList.remove('active'));
+                button.classList.add('active');
+                currentMonth = button.dataset.month;
+                renderEvents();
+            });
+        });
+
+        document.getElementById('search-input').addEventListener('input', (e) => {
+            searchTerm = e.target.value;
+            renderEvents();
+        });
+
+        document.getElementById('clear-filters').addEventListener('click', () => {
+            currentFilter = 'all';
+            currentMonth = 'all';
+            searchTerm = '';
+            document.getElementById('search-input').value = '';
+            document.querySelectorAll('.filter-button').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.month-filter').forEach(b => b.classList.remove('active'));
+            document.querySelector('[data-filter="all"]').classList.add('active');
+            document.querySelector('[data-month="all"]').classList.add('active');
+            renderEvents();
+        });
+
+        // Initialize
+        renderEvents();
+    </script>
+</body>
+</html>
+    <script id="html_badge_script1">
+        window.__genspark_remove_badge_link = "https://www.genspark.ai/api/html_badge/" +
+            "remove_badge?token=To%2FBnjzloZ3UfQdcSaYfDiege3f5mM%2FjilGzyYnKQckCrrYx%2BvUX%2FaDtoSy%2Be49x%2BlMrKaZoAwrQHMRM%2FAQl7s%2BKsGigUMgDD3PAyjrZGDU3k7lY7v2plCWWK6RsXOWV%2BPRfQdnT2przjCmBBSP1QU6MZ3qHlojy4pIfPpOgm2g3kz%2BTT%2BYosZIVjgy164r1fZsNi93%2Bym%2FOzTkYojQ2FbRAOn16NiqKJswswYp21zR7ojWYjAMh0NGllgB2Xp32tcRn4Pl3PuuaQBVsDve8kL7%2FQ09e%2F6%2B6HOS8%2BueEpGfYIp%2FR5JzFKJoPIG42c04s8Ka1Yx8%2BZqTZk1TmENAIKkVyFkBND%2B1nqzlnQ1KLwfkNDUHtE3kwYgji6qKDKxyJT%2BW5MgRISqwepdc7BChnAZou42bdydzHkABH%2FVHnQdPp0tUZ9oZoW4cP3E7wsZwRG%2B8GjeZxw5%2BUy9mDjdNc%2FI39J4wC53LJ%2FWSmOFOkPkpsHGguDYtpbf1hVWDhpA2YjpXiqUmNdpI0NCz0%2F0IJpWj80jyXi2JBMGpI%2F%2FoUldUXdP6kTaQtKFkgx%2B2t97U%2B";
+        window.__genspark_locale = "en-US";
+        window.__genspark_token = "To/BnjzloZ3UfQdcSaYfDiege3f5mM/jilGzyYnKQckCrrYx+vUX/aDtoSy+e49x+lMrKaZoAwrQHMRM/AQl7s+KsGigUMgDD3PAyjrZGDU3k7lY7v2plCWWK6RsXOWV+PRfQdnT2przjCmBBSP1QU6MZ3qHlojy4pIfPpOgm2g3kz+TT+YosZIVjgy164r1fZsNi93+ym/OzTkYojQ2FbRAOn16NiqKJswswYp21zR7ojWYjAMh0NGllgB2Xp32tcRn4Pl3PuuaQBVsDve8kL7/Q09e/6+6HOS8+ueEpGfYIp/R5JzFKJoPIG42c04s8Ka1Yx8+ZqTZk1TmENAIKkVyFkBND+1nqzlnQ1KLwfkNDUHtE3kwYgji6qKDKxyJT+W5MgRISqwepdc7BChnAZou42bdydzHkABH/VHnQdPp0tUZ9oZoW4cP3E7wsZwRG+8GjeZxw5+Uy9mDjdNc/I39J4wC53LJ/WSmOFOkPkpsHGguDYtpbf1hVWDhpA2YjpXiqUmNdpI0NCz0/0IJpWj80jyXi2JBMGpI//oUldUXdP6kTaQtKFkgx+2t97U+";
+    </script>
+    
+    <script id="html_notice_dialog_script" src="https://www.genspark.ai/notice_dialog.js"></script>
+    
